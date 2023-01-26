@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Projeto Xr</title>
+
+	<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+</head>
+<body>
+	<a-scene background="color: #e0e0e0">
+		<a-light type="ambient" color="#000000" intensity="1"></a-light>
+
+		<a-entity class="gallery">
+			<a-entity class="anchor" position="0 1.6 0">
+				<a-image class="image" position="0 0 -4" src="a.png" height="9" width="16" scale="0.36 0.36"></a-image>
+			</a-entity>
+
+			<a-entity class="anchor" position="0 1.6 0">
+				<a-image class="image" position="0 0 -4" src="b.png" height="9" width="16" scale="0.36 0.36"></a-image>
+			</a-entity>
+
+			<a-entity class="anchor" position="0 1.6 0">
+				<a-image class="image" position="0 0 -4" src="c.png" height="9" width="16" scale="0.36 0.36"></a-image>
+			</a-entity>
+
+			<a-entity class="anchor" position="0 1.6 0">
+				<a-image class="image" position="0 0 -4" src="d.png" height="9" width="16" scale="0.36 0.36"></a-image>
+			</a-entity>
+
+			<a-entity class="anchor" position="0 1.6 0">
+				<a-image class="image" position="0 0 -4" src="e.png" height="9" width="16" scale="0.36 0.36"></a-image>
+			</a-entity>
+
+			<a-entity class="anchor" position="0 1.6 0">
+				<a-image class="image" position="0 0 -4" src="f.png" height="9" width="16" scale="0.36 0.36"></a-image>
+			</a-entity>
+		</a-entity>
+
+		<a-entity position="0 1.6 -1" rotation="0 0 0" class="clock"
+			geometry="	primitive: plane;
+						height: auto;
+						width: auto;"
+			material="	color: #252525;
+						side: double;"
+			text="	value: clock;
+					width: auto;
+					anchor: center;
+					align: right;">
+		</a-entity>
+
+		<!-- <a-entity gltf-model="untitled.glb"></a-entity> -->
+
+		<a-camera position="0 1.6 0" rotation="0 0 0" active="true" look-controls wasd-controls>
+			<a-cursor 
+				geometry="primitive: plane;"
+				material="color: #151515">	
+			</a-cursor>
+		</a-camera>
+	</a-scene>
+	<script type="text/javascript">
+		const gallery = document.querySelector(".gallery");
+
+		function update() {
+			var list = gallery.querySelectorAll(".anchor");
+
+			for (var i = 0; i < list.length; i++) {
+				list[i].setAttribute("rotation", "0 " + i * 360/(list.length) + " 0");
+				list[i].querySelector(".image").setAttribute("position", "0 0 " + (list.length - 1));
+
+				list[i].addEventListener("click", function() {
+					alert("damn");
+				});
+			}
+		}
+
+		update();
+	</script>
+	<script type="text/javascript">
+		var clock = document.querySelector(".clock");
+
+		function format(str, len=2) {
+			str = str.toString();
+
+			while (str.length < len) {
+				str = "0" + str;
+			}
+
+			return str;
+		}
+
+		var startTime = Date.now();
+
+		setInterval(function() {
+			var d = new Date(Date.now() - startTime + 180 * 60 * 1000);
+
+			var t = "";
+
+			if (d.getHours()) {
+				t += format(d.getHours()) + "h ";
+			}
+
+			if (d.getMinutes()) {
+				t += format(d.getMinutes()) + "m ";
+			}
+
+			if (d.getSeconds()) {
+				t += format(d.getSeconds()) + "s ";
+			}
+
+			if (d.getMilliseconds()) {
+				t += format(d.getMilliseconds(), 4) + "ms";
+			}
+
+			clock.setAttribute("text", "value",
+			);
+
+			clock.setAttribute("text", "value", t);
+		}, 1000/2);
+	</script>
+</body>
+</html>

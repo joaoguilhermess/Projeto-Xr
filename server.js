@@ -1,35 +1,41 @@
-const express = require("express");
-const https = require("https");
-const path = require("path");
-const fs = require("fs");
+import express from "express";
+import Util from "./util.js";
+import https from "https";
 
-var app = express();
+const KeyFile = "server.key";
+const CertFile = "server.pem";
 
-app.get("/", function(req, res) {
-	res.sendFile(path.join(__dirname, "index.html"));
-});
+export default class Server {
+	static Init(port, callback) {
+		this.app = express();
 
-app.get("/whitney.fnt", function(req, res) {
-	res.sendFile(path.join(__dirname, "whitney.fnt"));
-});
+		this.server = https.createServer({
+			key: Util.readFile(KeyFile),
+			cert: Util.readFile(CertFile)
+		}, this.app);
 
-app.get("/whitney.png", function(req, res) {
-	res.sendFile(path.join(__dirname, "whitney.png"));
-});
+		this.server.listen(port, callback);
+	}
 
-app.get("/untitled.glb", function(req, res) {
-	res.sendFile(path.join(__dirname, "untitled.glb"));
-});
+	static registryScript(path, script) {
+		this.app.get(path, script);
+	}
 
-app.get("/paper.png", function(req, res) {
-	res.sendFile(path.join(__dirname, "paper.png"));
-});
+	static registryFile(path, file) {
+		this.app.get(path, function(req, res) {
+			res.sendFile(file);
+		});
+	}
 
-var server = https.createServer({
-	key: fs.readFileSync("https.key"),
-	cert: fs.readFileSync("https.cert")
-}, app);
+	static registryDir(path) {
+		this.app.get(path + "/*", function(req, res) {
+			var file = Util.joinPath("." + path, req.url.split("/").slice(2).join("/"));
 
-server.listen(3000, function() {
-	console.log("Ready");
-});
+			if (Util.verifyFile(file)) {
+				res.sendFile(Util.resolvePath(file));
+			} else {
+				res.sendStatus(404);
+			}
+		});
+	}
+}
