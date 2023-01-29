@@ -26,8 +26,6 @@ var offset = 0;
 
 
 function factor(v, f=1000000) {
-	console.log(f);
-
 	v = Math.round(v * f)/f;
 
 	return nonNaN(v);
@@ -75,11 +73,13 @@ function log(data, x, y, z) {
 	);
 }
 
-var resolution = 10;
+var resolution = 10000;
 
 var offset = 0;
 
 var rad = Math.PI/180;
+
+var tohoes
 
 SocketIo.on("lg", function(data) {
 	offset = data[1][2];
@@ -87,19 +87,34 @@ SocketIo.on("lg", function(data) {
 	data[1][2] -= offset;
 	data[3][2] -= offset;
 
+	var acel = data[0];
 	var gyro = data[1];
+	var magn = data[2];
+	var vect = data[3];
 
-	var x = gyro[0];
-	var y = gyro[1];
-	var z = gyro[2];
+	var x1 = gyro[0];
+	var y1 = gyro[1];
+	var z1 = gyro[2];
 
-	x = factor(x, resolution);
-	y = factor(y, resolution);
-	z = factor(z, resolution);
+	x1 = factor(x1, 1);
+	y1 = factor(y1, 1);
+	z1 = factor(z1, 1);
 
-	// var p = Math.cos();
-	// var p = Math.cos;
-	// var p = Math.sin(z);
+	var x2 = vect[0];
+	var y2 = vect[1];
+	var z2 = vect[2];
+
+	var dx1 = x1 - x2;
+	var dy1 = y1 - y2;
+	var dz1 = z1 - z2;
+
+	// x = factor(x, resolution);
+	// y = factor(y, resolution);
+	// z = factor(z, resolution);
+
+	var x = x1 + dx1/4;
+	var y = y1 + dy1/4;
+	var z = z1 + dz1/10;
 
 	log(data, x, y, z);
 

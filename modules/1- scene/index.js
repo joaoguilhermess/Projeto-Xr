@@ -51,6 +51,12 @@ class Entity {
 		this.entity.setAttribute("rotation", x + " " + z + " " + y);
 	}
 
+	move(x, y, z) {
+		var xyz = this.entity.getAttribute("position");
+
+		this.translate(xyz.x + x, xyz.z + y, xyz.y + z);
+	}
+
 	translate(x, y, z) {
 		this.entity.setAttribute("position", x + " " + z + " " + y);
 	}

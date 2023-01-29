@@ -5,6 +5,35 @@ var k = t*2;
 
 var d = 5;
 
+var rad = Math.PI/180;
+
+var r = 10;
+
+(async function() {
+	for (var i = 0; i < 360/r; i++) {
+		var x = Math.sin((i * r) * rad);
+		var y = Math.cos((i * r) * rad);
+
+		x *= 15;
+		y *= 15;
+
+		var box = scene.createEntity("a-box");
+
+		box.setAttribute("color", "#000000");
+
+		box.translate(x, y, 1.6);
+
+		box.scale(0.3, 0.3, 0.3);
+
+		console.log(box);
+
+		box.addEventListener("click", function(event) {
+			event.target.setAttribute("color", "#ff0000");
+		});
+	}
+})
+();
+
 (async function() {
 	for (var i = 0; i < 10000; i++) {
 		var box = scene.createEntity("a-box");
