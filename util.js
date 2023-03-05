@@ -22,4 +22,12 @@ export default class Util {
 	static readDir(path) {
 		return fs.readdirSync(path);
 	}
+
+	static writeStream(path) {
+		return fs.createWriteStream(path);
+	}
+
+	static readStream(path) {
+		return fs.createReadStream(path);
+	}
 }

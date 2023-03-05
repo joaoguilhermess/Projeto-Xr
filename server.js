@@ -29,7 +29,9 @@ export default class Server {
 
 	static registryDir(path) {
 		this.app.get(path + "/*", function(req, res) {
-			var file = Util.joinPath("." + path, req.url.split("/").slice(2).join("/"));
+			var args = decodeURI(req.url).split("/");
+
+			var file = Util.joinPath("." + path, args.slice(2).join("/"));
 
 			if (Util.verifyFile(file)) {
 				res.sendFile(Util.resolvePath(file));

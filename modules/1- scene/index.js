@@ -1,81 +1,72 @@
+import * as THREE from "three";
+
 class Scene {
-	constructor() {
-		this.scene = document.createElement("a-scene");
+	static Init() {
+		var scene = new THREE.Scene();
 
-		this.assets = document.createElement("a-assets");
+		var clock = new THREE.Clock();
 
-		this.scene.append(this.assets);
+		scene.background = new THREE.Color(0x000000);
 
-		document.body.append(this.scene);	
-	}
+		// scene.fog = new THREE.Fog(0x000000, 0, 15);
 
-	registryAsset(id, src) {
-		var asset = document.createElement("a-assets-item");
+		var camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 2000);
+		scene.add(camera);
 
-		asset.id = id;
+		camera.position.set(0, 0, 0);
+		camera.lookAt(0, 0, 0);
 
-		asset.setAttribute("src", src);
+		var renderer = new THREE.WebGLRenderer({antialias: true});
+		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		
+		renderer.gammaFactor = 2;
+		renderer.outputEncoding = THREE.sRGBEncoding;
+		renderer.physicallyCorrectLights = false;
+		// renderer.toneMapping = THREE.ACESFilmicToneMapping;
+		renderer.toneMapping = THREE.noToneMapping;
+		renderer.toneMappingExposure = 1;
+		renderer.maxMorphTargets = 8;
+		renderer.maxMorphNormals = 4;
 
-		this.assets.append(asset);
+		renderer.xr.enabled = true;
+		renderer.xr.setReferenceSpaceType("local");
 
-		return asset;
-	}
+		document.body.appendChild(renderer.domElement);
 
-	createEntity(tag) {
-		var entity = document.createElement(tag);
+		window.addEventListener("resize", function() {
+			camera.aspect = window.innerWidth/window.innerHeight;
+			camera.updateProjectionMatrix();
 
-		this.scene.append(entity);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		});
 
-		return new Entity(entity);
-	}
+		var rad = Math.PI/180;
 
-	setAttribute(...args) {
-		this.scene.setAttribute(...args);
-	}
-}
+		renderer.setAnimationLoop(function() {
+			renderer.render(scene, camera);
 
-class Entity {
-	constructor(entity) {
-		this.entity = entity;
-	}
+			if (window.Test) {
+				if (Test.car) {
+					var r = clock.getDelta()/10 * Math.PI;
+					// console.log(Test.car.scene.rotation.y/Math.PI * 180, r, clock.getElapsedTime());
+					if (r != Infinity) {
+						Test.car.scene.rotation.y -= r;
+					}
+				}
+			}
+		});
 
-	setAttribute(...args) {
-		this.entity.setAttribute(...args);
-	}
+		this.scene = scene;
+		this.renderer = renderer;
 
-	linkAsset(asset) {
-		this.entity.setAttribute("src", "#" + asset.id);
-	}
+		this.camera = camera;
+		this.light = light;
 
-	rotate(x, y, z) {
-		this.entity.setAttribute("rotation", x + " " + z + " " + y);
-	}
-
-	move(x, y, z) {
-		var xyz = this.entity.getAttribute("position");
-
-		this.translate(xyz.x + x, xyz.z + y, xyz.y + z);
-	}
-
-	translate(x, y, z) {
-		this.entity.setAttribute("position", x + " " + z + " " + y);
-	}
-
-	scale(x, y, z) {
-		this.entity.setAttribute("scale", x + " " + z + " " + y);
-	}
-
-	createEntity(tag) {
-		var entity = document.createElement(tag);
-
-		this.entity.append(entity);
-
-		return new Entity(entity);
-	}
-
-	addEventListener(...args) {
-		this.entity.addEventListener(...args);
+		this.clock = clock;
 	}
 }
 
-window.scene = new Scene();
+window.Scene = Scene;
+
+Scene.Init();
