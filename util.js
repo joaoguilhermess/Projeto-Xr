@@ -19,6 +19,10 @@ export default class Util {
 		return fs.existsSync(path);
 	}
 
+	static readStats(path) {
+		return fs.lstatSync(path);
+	}
+
 	static readDir(path) {
 		return fs.readdirSync(path);
 	}

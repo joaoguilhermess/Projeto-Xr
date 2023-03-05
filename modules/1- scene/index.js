@@ -46,12 +46,12 @@ class Scene {
 		renderer.setAnimationLoop(function() {
 			renderer.render(scene, camera);
 
-			if (window.Test) {
-				if (Test.car) {
-					var r = clock.getDelta()/10 * Math.PI;
-					// console.log(Test.car.scene.rotation.y/Math.PI * 180, r, clock.getElapsedTime());
+			if (window.Lambo) {
+				if (Lambo.car) {
+					var r = clock.getDelta()/30 * Math.PI;
+					
 					if (r != Infinity) {
-						Test.car.scene.rotation.y -= r;
+						Lambo.car.scene.rotation.y -= r;
 					}
 				}
 			}

@@ -17,16 +17,22 @@ class SocketIo {
 
 		this.socket.on(type, function(...args) {
 			if (!one) {
-				callback1(...args);
+				if (callback1 != null) {
+					callback1(...args);
+				}
 				one = true;
 			} else {
-				callback2(...args);
+				if (callback2 != null) {
+					callback2(...args);
+				}
 			}
 		});
 
 		this.socket.on("off", function(name) {
 			if (name == type) {
-				callback3();
+				if (callback3 != null) {
+					callback3();
+				}
 				one = false;
 			}
 		});

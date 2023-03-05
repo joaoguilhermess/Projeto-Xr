@@ -33,7 +33,7 @@ class Sky {
 		});
 		texture.magFilter = THREE.LinearFilter;
 		texture.minFilter = THREE.LinearFilter;
-		texture.generateMipmaps = false;
+		texture.generateMipmaps = true;
 		texture.encoding = THREE.sRGBEncoding;
 		this.mesh.material.map = texture;
 
@@ -50,7 +50,7 @@ class Sky {
 		});
 		texture.magFilter = THREE.LinearFilter;
 		texture.minFilter = THREE.LinearFilter;
-		texture.generateMipmaps = false;
+		texture.generateMipmaps = true;
 		this.mesh.material.displacementMap = texture;
 	}
 

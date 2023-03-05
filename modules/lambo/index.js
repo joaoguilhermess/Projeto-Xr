@@ -5,7 +5,7 @@ import {RGBELoader} from "three/addons/loaders/RGBELoader.js";
 // var s = 0.125;
 var s = 1;
 
-class Test {
+class Lambo {
 	static async Init() {
 		await this.loadHdr();
 
@@ -23,9 +23,9 @@ class Test {
 			loader.load("/lan/1607958265982.equirectangular.e0f5d.hdr", resolve);
 		});
 
-		texture.magFilter = THREE.LinearFilter;
-		texture.minFilter = THREE.LinearFilter;
-		texture.generateMipmaps = false;
+		// texture.magFilter = THREE.LinearFilter;
+		// texture.minFilter = THREE.LinearFilter;
+		texture.generateMipmaps = true;
 		texture.encoding = THREE.sRGBEncoding;
 		texture.mapping = THREE.EquirectangularRefractionMapping;
 
@@ -65,6 +65,6 @@ class Test {
 	}
 }
 
-window.Test = Test;
+window.Lambo = Lambo;
 
-Test.Init();
+Lambo.Init();
