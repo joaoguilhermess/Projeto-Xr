@@ -41,11 +41,19 @@ class Lambo {
 			loader.load("/lan/1607958265982.car.3df8c.gltf", resolve);
 		});
 
-		Scene.scene.add(car.scene);
-
 		car.scene.position.set(-2, -1.6, -4);
 		car.scene.scale.set(s, s, s);
 		
+		Scene.scene.add(car.scene);
+
+		Scene.addFunction(function(delta) {
+			var r = delta/30 * Math.PI;
+			
+			if (r != Infinity) {
+				Lambo.car.scene.rotation.y -= r;
+			}
+		});
+
 		this.car = car;
 	}
 
@@ -56,10 +64,10 @@ class Lambo {
 			loader.load("/lan/1607958265982.environment.e3f63.gltf", resolve);
 		});
 	
-		Scene.scene.add(garage.scene);
-
 		garage.scene.position.set(0, 0, 0);
 		garage.scene.scale.set(s, s, s);
+
+		Scene.scene.add(garage.scene);
 
 		this.garage = garage;
 	}

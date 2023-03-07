@@ -1,6 +1,8 @@
 import * as THREE from "three";
 
 class Scene {
+	static functions = [];
+
 	static Init() {
 		var scene = new THREE.Scene();
 
@@ -14,7 +16,9 @@ class Scene {
 		scene.add(camera);
 
 		camera.position.set(0, 0, 0);
-		camera.lookAt(0, 0, 0);
+		// camera.lookAt(0, 0, 0);
+
+		camera.lookAt(-2, 0, -4);
 
 		var renderer = new THREE.WebGLRenderer({antialias: true});
 		renderer.setPixelRatio(window.devicePixelRatio);
@@ -43,16 +47,18 @@ class Scene {
 
 		var rad = Math.PI/180;
 
+		var context = this;
+
 		renderer.setAnimationLoop(function() {
 			renderer.render(scene, camera);
 
-			if (window.Lambo) {
-				if (Lambo.car) {
-					var r = clock.getDelta()/30 * Math.PI;
-					
-					if (r != Infinity) {
-						Lambo.car.scene.rotation.y -= r;
-					}
+			var delta = clock.getDelta();
+
+			for (var i = 0; i < context.functions.length; i++) {
+				try {
+					context.functions[i](delta);
+				} catch (e) {
+					// console.error(e);
 				}
 			}
 		});
@@ -64,6 +70,10 @@ class Scene {
 		this.light = light;
 
 		this.clock = clock;
+	}
+
+	static addFunction(fun) {
+		this.functions.push(fun);
 	}
 }
 
