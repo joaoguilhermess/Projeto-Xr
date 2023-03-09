@@ -12,15 +12,16 @@ class Scene {
 
 		// scene.fog = new THREE.Fog(0x000000, 0, 15);
 
-		var camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 2000);
+		var camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.5, 100);
 		scene.add(camera);
 
 		camera.position.set(0, 0, 0);
 		// camera.lookAt(0, 0, 0);
 
-		camera.lookAt(-2, 0, -4);
+		camera.lookAt(0, 0, 0);
+		// camera.lookAt(-2, 0, -4);
 
-		var renderer = new THREE.WebGLRenderer({antialias: true});
+		var renderer = new THREE.WebGLRenderer({antialias: false, powerPreference: "high-performance"});
 		renderer.setPixelRatio(window.devicePixelRatio);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		

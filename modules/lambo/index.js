@@ -4,6 +4,7 @@ import {RGBELoader} from "three/addons/loaders/RGBELoader.js";
 
 // var s = 0.125;
 var s = 1;
+// var s = 1/18;
 
 class Lambo {
 	static async Init() {
@@ -43,11 +44,11 @@ class Lambo {
 
 		car.scene.position.set(-2, -1.6, -4);
 		car.scene.scale.set(s, s, s);
-		
+
 		Scene.scene.add(car.scene);
 
 		Scene.addFunction(function(delta) {
-			var r = delta/30 * Math.PI;
+			var r = delta/(60/2) * Math.PI;
 			
 			if (r != Infinity) {
 				Lambo.car.scene.rotation.y -= r;
@@ -64,7 +65,7 @@ class Lambo {
 			loader.load("/lan/1607958265982.environment.e3f63.gltf", resolve);
 		});
 	
-		garage.scene.position.set(0, 0, 0);
+		garage.scene.position.set(-2, -1.6, -4);
 		garage.scene.scale.set(s, s, s);
 
 		Scene.scene.add(garage.scene);

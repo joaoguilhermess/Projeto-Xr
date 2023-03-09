@@ -4,37 +4,59 @@ class Random {
 	static async Init() {
 		var loader = new THREE.TextureLoader();
 
-		var geometry = new THREE.PlaneBufferGeometry(1, 1);
+		var rad = Math.PI/180;
 
-		var l = 8;
+		var rows = 3;
+		var columns = 6;
+		var space = 360/columns;
 
-		for (var k = -1; k < 2; k++) {
-			for (var i = 0; i < l; i++) {
+		var s = 2;
+
+		var video = document.createElement("video");
+
+		video.autoplay = true;
+
+		document.body.append(video);
+
+		video.style.display = "none";
+
+		var stream = await new Promise(function(resolve, reject) {
+			navigator.getUserMedia({video: {facingMode: "environment"}, audio: false}, resolve, function() {});
+		});
+
+		video.srcObject = stream;
+
+		await new Promise(function(resolve, reject) {
+			video.onplay = resolve;
+		});
+
+		this.video = video;
+
+		var geometry = new THREE.PlaneBufferGeometry(video.videoWidth/500, video.videoHeight/500);
+
+		var texture = new THREE.VideoTexture(video);
+
+		for (var c = 0; c < columns; c++) {
+			for (var r = -Math.floor(rows/2); r < rows -Math.floor(rows/2); r++) {
 				var material = new THREE.MeshStandardMaterial();
 
-				var texture = await new Promise(function(resolve, reject) {
-					loader.load("https://picsum.photos/256?v=" + Math.random(), resolve);
-				});
+				// var texture = await new Promise(function(resolve, reject) {
+				// 	loader.load("https://picsum.photos/" + 1920/4 + "/" + 1080/4 + "?v=" + Math.random(), resolve);
+				// });
 
 				material.map = texture;
 
-				texture.generateMipmaps = true;
-				texture.encoding = THREE.sRGBEncoding;
+				// texture.generateMipmaps = true;
+				// texture.encoding = THREE.sRGBEncoding;
 
 				var mesh = new THREE.Mesh(geometry, material);
 
-				var j = 360/l;
+				var cs = Math.sin(rad * c * space) * s;
+				var cc = Math.cos(rad * c * space) * s;
+				var rs = Math.sin(rad * r * space) * s;
+				var rc = Math.cos(rad * r * space) * s;
 
-				var rad = Math.PI/180;
-
-				var t = Math.sin(rad * k * j);
-				var t2 = Math.cos(rad * k * j);
-
-				var r = l * 0.25;
-
-				mesh.position.set(Math.sin(rad * i * j) * r * t2, r * t, Math.cos(rad * i * j) * r);
-
-				console.log(mesh.position.x, mesh.position.y, mesh.position.z);
+				mesh.position.set(cc, rs, cs);
 
 				mesh.lookAt(0, 0, 0);
 
@@ -46,4 +68,4 @@ class Random {
 
 window.Random = Random;
 
-Random.Init();
+// Random.Init();
