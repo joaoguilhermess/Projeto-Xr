@@ -20,7 +20,7 @@ export function Init() {
 		if (!Util.verifyFile(file)) {
 			var url = "https://www.lamborghini.com/sites/it-en/files/js_assets/experience/assets/" + args;
 			
-			// console.log(url);
+			console.log(url);
 
 			var f = await fetch(url);
 

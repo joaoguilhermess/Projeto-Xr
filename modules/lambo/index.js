@@ -47,7 +47,7 @@ class Lambo {
 
 		Scene.scene.add(car.scene);
 
-		Scene.addFunction(function(delta) {
+		Scene.addCallback(function(delta) {
 			var r = delta/(60/2) * Math.PI;
 			
 			if (r != Infinity) {

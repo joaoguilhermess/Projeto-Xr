@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 class Scene {
-	static functions = [];
+	static callbacks = [];
 
 	static Init() {
 		var scene = new THREE.Scene();
@@ -51,17 +51,17 @@ class Scene {
 		var context = this;
 
 		renderer.setAnimationLoop(function() {
-			renderer.render(scene, camera);
-
 			var delta = clock.getDelta();
 
-			for (var i = 0; i < context.functions.length; i++) {
+			for (var i = 0; i < context.callbacks.length; i++) {
 				try {
-					context.functions[i](delta);
+					context.callbacks[i](delta);
 				} catch (e) {
 					// console.error(e);
 				}
 			}
+
+			renderer.render(scene, camera);
 		});
 
 		this.scene = scene;
@@ -73,11 +73,12 @@ class Scene {
 		this.clock = clock;
 	}
 
-	static addFunction(fun) {
-		this.functions.push(fun);
+	static addCallback(fun) {
+		this.callbacks.push(fun);
 	}
 }
 
+window.THREE = THREE;
 window.Scene = Scene;
 
 Scene.Init();

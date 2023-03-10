@@ -26,7 +26,9 @@ class FPS {
 
 		var last = [];
 
-		Scene.addFunction(function() {
+		var v = new THREE.Vector3();
+
+		Scene.addCallback(function() {
 			var t = performance.now();
 
 			while (last.length > 0 && last[0] <= t - 1000) {
@@ -35,7 +37,10 @@ class FPS {
 
 			last.push(t);
 
-			// mesh.text = last.length;
+			Scene.camera.getWorldDirection(v);
+
+			mesh.position.set(v.x * 5, 0, v.z * 5);
+			mesh.lookAt(0, 0, 0);
 		});
 
 		setInterval(function() {
