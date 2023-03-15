@@ -29,8 +29,8 @@ class Keyboard {
 
 		this.keys.scale.setScalar(0.065);
 
-		Controler.addCallback(this.keys.children, function() {
-			
+		Controller.addCallback(this.keys.children, function(object) {
+			alert(object);
 		});
 
 		Scene.scene.add(this.keys);
@@ -180,4 +180,4 @@ class Keyboard {
 
 window.Keyboard = Keyboard;
 
-Keyboard.Init();
+// Keyboard.Init();

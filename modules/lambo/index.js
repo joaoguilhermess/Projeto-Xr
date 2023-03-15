@@ -76,4 +76,4 @@ class Lambo {
 
 window.Lambo = Lambo;
 
-Lambo.Init();
+// Lambo.Init();
