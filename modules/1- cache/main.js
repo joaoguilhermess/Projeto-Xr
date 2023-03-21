@@ -41,7 +41,3 @@ export function Init() {
 function encode(str) {
 	return Buffer.from(str).toString("hex");
 }
-
-function decode() {
-
-}
