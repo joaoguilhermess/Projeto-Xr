@@ -43,9 +43,9 @@ class FPS {
 			mesh.lookAt(0, 0, 0);
 		});
 
-		setInterval(function() {
-			mesh.text = last.length;
-		}, 250);
+		// setInterval(function() {
+			// mesh.text = last.length;
+		// }, 250);
 
 		this.mesh = mesh;
 	}
