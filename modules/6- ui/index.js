@@ -51,6 +51,22 @@ class Video {
 	}
 }
 
+class Menu {
+	constructor() {
+
+	}
+}
+
+class Button {
+	constructor(height, width, text) {
+
+	}
+
+	loadMesh() {
+		var geometry = new THREE.PlaneBufferGeometry(1, 1);
+	}
+}
+
 window.Ui = Ui;
 
 Ui.Init();

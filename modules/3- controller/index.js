@@ -10,67 +10,32 @@ class Controller {
 
 		this.callbacks = [];
 
-		var offset = [];
-
 		var last = [];
 
 		var context = this;
 		SocketIo.on("controller", function(data) {
-			offset[0] = data[3][0];
-			offset[1] = data[3][1];
-			offset[2] = data[3][2];
-
 			context.addRay();
 		}, function(data) {
-			// data[3][0] -= offset[0];
-			// data[3][1] -= offset[1];
-			// data[3][2] -= offset[2];
+			data[3][1] = 0;
 
-			// for (var i = last.length -1; i >= 0; i--) {
-			for (var i = 0; i < last.length; i++) {
-				data[3][0] = (data[3][0] + last[i][0])/2;
-				data[3][1] = (data[3][1] + last[i][1])/2;
-				// data[3][2] = (data[3][2] + last[i][2])/2;
+			if (data[3][2] > 180) {
+				data[3][2] -= 360;
 			}
 
-			last.push([data[3][0], data[3][1], data[3][2]]);
+			for (var i = 0; i < last.length; i++) {
+				data[3][0] = (data[3][0] + last[i][0])/2;
+				// data[3][1] = (data[3][1] + last[i][1])/2;
+				data[3][2] = (data[3][2] + last[i][2])/2;
+			}
 
-			if (last.length > 4) {
+			last.push(data[3]);
+
+			if (last.length >= 10) {
 				last.shift();
 			}
 
-			data[3][2] = Math.sin(data[3][1] * rad) * data[3][0] * window.innerWidth/window.innerHeight;
-			data[3][0] = Math.cos(data[3][1] * rad) * data[3][0];
+			FPS.mesh.text = data[3][0].toFixed(1) + "\n" + data[3][1].toFixed(1) + "\n" + data[3][2].toFixed(1);
 
-			FPS.mesh.text = data[3][0].toFixed(0) + " " + data[3][1].toFixed(0) + " " + data[3][2].toFixed(0);
-
-
-			// data[3][0] = 0;
-
-			// data[3][2] = 
-
-			// data[3][2] = Math.round(data[3][1])/2;
-
-			// 	var a = Math.min(data[3][2], last[i][2]);
-			// 	var b = Math.max(data[3][2], last[i][2]);
-
-			// 	var t = b - a;
-
-			// 	if (t > 180) {
-			// 		t = 360 - t;
-			// 		t *= -1;
-			// 	}
-
-			// 	if (a == data[3][2]) {
-			// 		t *= -1;
-			// 	}
-
-			// 	data[3][2] -= t/3;
-
-			// 	if (data[3][2] > 360) {
-			// 		data[3][2] -= 360;
-			// 	}
-			
 			context.mesh.rotation.set(
 				THREE.MathUtils.degToRad(data[3][0]),
 				THREE.MathUtils.degToRad(-data[3][2]),
