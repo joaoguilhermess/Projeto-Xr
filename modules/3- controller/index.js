@@ -12,11 +12,17 @@ class Controller {
 
 		var last = [];
 
+		var offset = 0;
+
 		var context = this;
 		SocketIo.on("controller", function(data) {
+			offset = data[3][2];
+
 			context.addRay();
 		}, function(data) {
 			data[3][1] = 0;
+
+			data[3][2] -= offset;
 
 			if (data[3][2] > 180) {
 				data[3][2] -= 360;
@@ -30,7 +36,7 @@ class Controller {
 
 			last.push(data[3]);
 
-			if (last.length >= 10) {
+			if (last.length >= 6) {
 				last.shift();
 			}
 
@@ -42,11 +48,11 @@ class Controller {
 				THREE.MathUtils.degToRad(-data[3][1])
 			);
 		}, null);
-	}
 
-		// Scene.renderer.xr.getController(0).addEventListener("selectstart", function(event) {
-			// alert(event);
-		// });
+		Scene.renderer.xr.getController(0).addEventListener("selectstart", function() {
+			context.Cast();
+		});
+	}
 
 	static addCallback(list, callback) {
 		this.callbacks.push({
@@ -75,6 +81,8 @@ class Controller {
 		mesh.position.set(1, -0.5, 0);
 
 		Scene.scene.add(mesh);
+
+		Scene.camera.attach(mesh);
 
 		this.mesh = mesh;
 	}
