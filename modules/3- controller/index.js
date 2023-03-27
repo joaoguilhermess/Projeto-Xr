@@ -10,6 +10,26 @@ class Controller {
 
 		this.callbacks = [];
 
+		this.start();
+
+		var context = this;
+		Scene.renderer.xr.getController(0).addEventListener("selectstart", function() {
+			context.cast();
+		});
+
+		document.body.addEventListener("click", function() {
+			context.cast();
+		});
+	}
+
+	static addCallback(list, callback) {
+		this.callbacks.push({
+			children: list,
+			callback: callback 
+		});
+	}
+
+	static start() {
 		var last = [];
 
 		var offset = 0;
@@ -21,8 +41,6 @@ class Controller {
 			context.addRay();
 		}, function(data) {
 			data[3][1] = 0;
-
-			data[3][2] -= offset;
 
 			if (data[3][2] > 180) {
 				data[3][2] -= 360;
@@ -39,26 +57,13 @@ class Controller {
 			if (last.length >= 6) {
 				last.shift();
 			}
-
-			FPS.mesh.text = data[3][0].toFixed(1) + "\n" + data[3][1].toFixed(1) + "\n" + data[3][2].toFixed(1);
-
+			
 			context.mesh.rotation.set(
 				THREE.MathUtils.degToRad(data[3][0]),
 				THREE.MathUtils.degToRad(-data[3][2]),
 				THREE.MathUtils.degToRad(-data[3][1])
 			);
 		}, null);
-
-		Scene.renderer.xr.getController(0).addEventListener("selectstart", function() {
-			context.Cast();
-		});
-	}
-
-	static addCallback(list, callback) {
-		this.callbacks.push({
-			children: list,
-			callback: callback 
-		});
 	}
 
 	static addRay() {
@@ -87,7 +92,7 @@ class Controller {
 		this.mesh = mesh;
 	}
 
-	static Cast() {
+	static cast() {
 		var v = new THREE.Vector3();
 
 		Scene.camera.getWorldDirection(v);
@@ -97,15 +102,17 @@ class Controller {
 		var objects = this.raycaster.intersectObjects(Scene.scene.children);
 
 		if (objects.length > 0) {
-			for (var i = 0; i < this.callbacks.length; i++) {
-				try {
-					if (this.callbacks[i].children.includes(objects[0].object.parent)) {
-						this.callbacks[i].callback(objects[0].object);
-					}
-				} catch (e) {
-					// console.error(e);
-				}
-			}
+			console.log(objects.length);
+
+			// for (var i = 0; i < this.callbacks.length; i++) {
+			// 	try {
+			// 		if (this.callbacks[i].children.includes(objects[0].object.parent)) {
+			// 			this.callbacks[i].callback(objects[0].object);
+			// 		}
+			// 	} catch (e) {
+			// 		// console.error(e);
+			// 	}
+			// }
 		}
 	}
 }

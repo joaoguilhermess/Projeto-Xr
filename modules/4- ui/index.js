@@ -101,7 +101,7 @@ class PinnedText {
 
 class Menu {
 	constructor() {
-
+		
 	}
 
 	loadMesh() {
