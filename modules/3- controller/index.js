@@ -6,8 +6,6 @@ class Controller {
 	static Init() {
 		this.raycaster = new THREE.Raycaster();
 
-		this.raycaster.ray.origin.set(0, 0, 0);
-
 		this.callbacks = [];
 
 		this.start();
@@ -20,6 +18,10 @@ class Controller {
 		document.body.addEventListener("click", function() {
 			context.cast();
 		});
+
+		setInterval(function() {
+			context.cast();
+		}, 1000/30);
 	}
 
 	static addCallback(list, callback) {
@@ -73,12 +75,23 @@ class Controller {
 
 		var geometry = new THREE.BufferGeometry();
 
+		var v = Math.sin(THREE.MathUtils.degToRad(45) * 0.075);
+
 		geometry.setFromPoints([
 			new THREE.Vector3(0, 0, -2.5),
-			new THREE.Vector3(-Math.sin(THREE.MathUtils.degToRad(45) * 0.05), Math.sin(THREE.MathUtils.degToRad(45) * 0.05), -2.5),
-			new THREE.Vector3(Math.sin(THREE.MathUtils.degToRad(45) * 0.05),  Math.sin(THREE.MathUtils.degToRad(45) * 0.05), -2.5),
-			new THREE.Vector3(0, 0, -2.5),
-			new THREE.Vector3(0, 0, 0)
+			new THREE.Vector3(0, 0, -5),
+			new THREE.Vector3(v, 0, -5),
+			new THREE.Vector3(0, v, -5),
+			new THREE.Vector3(-v, 0, -5),
+			new THREE.Vector3(0, -v, -5),
+			new THREE.Vector3(v, 0, -5),
+			new THREE.Vector3(0, 0, -5),
+			new THREE.Vector3(0, v, -5),
+			new THREE.Vector3(0, 0, -5),
+			new THREE.Vector3(-v, 0, -5),
+			new THREE.Vector3(0, 0, -5),
+			new THREE.Vector3(0, -v, -5),
+			new THREE.Vector3(0, 0, -5)
 		]);
 
 		var mesh = new THREE.Line(geometry, material);
@@ -87,7 +100,7 @@ class Controller {
 
 		Scene.scene.add(mesh);
 
-		Scene.camera.attach(mesh);
+		// Scene.camera.attach(mesh);
 
 		this.mesh = mesh;
 	}
@@ -95,24 +108,22 @@ class Controller {
 	static cast() {
 		var v = new THREE.Vector3();
 
-		Scene.camera.getWorldDirection(v);
+		this.mesh.getWorldDirection(v);
 
-		this.raycaster.ray.direction = v;
+		this.raycaster.set(new THREE.Vector3(0, 0, 0), v);
+		// this.raycaster.set(this.mesh.position, v);
 
-		var objects = this.raycaster.intersectObjects(Scene.scene.children);
+		// this.raycaster.ray.origin = this.mesh.position;
+		// this.raycaster.ray.direction = v;
 
-		if (objects.length > 0) {
-			console.log(objects.length);
+		var objects = this.raycaster.intersectObjects(Scene.scene.children, true);
 
-			// for (var i = 0; i < this.callbacks.length; i++) {
-			// 	try {
-			// 		if (this.callbacks[i].children.includes(objects[0].object.parent)) {
-			// 			this.callbacks[i].callback(objects[0].object);
-			// 		}
-			// 	} catch (e) {
-			// 		// console.error(e);
-			// 	}
-			// }
+		for (var i = 0; i < objects.length; i++) {
+			if (objects[i].object.type != "Line") {
+				console.log(objects[i].object);
+
+				break;
+			}
 		}
 	}
 }
