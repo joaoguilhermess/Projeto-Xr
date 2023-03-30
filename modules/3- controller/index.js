@@ -6,8 +6,6 @@ class Controller {
 	static Init() {
 		this.raycaster = new THREE.Raycaster();
 
-		this.callbacks = [];
-
 		this.start();
 
 		var context = this;
@@ -19,16 +17,9 @@ class Controller {
 			context.cast();
 		});
 
-		setInterval(function() {
-			context.cast();
-		}, 1000/30);
-	}
-
-	static addCallback(list, callback) {
-		this.callbacks.push({
-			children: list,
-			callback: callback 
-		});
+		// setInterval(function() {
+		// 	context.cast();
+		// }, 1000/30);
 	}
 
 	static start() {
@@ -42,7 +33,7 @@ class Controller {
 
 			context.addRay();
 		}, function(data) {
-			data[3][1] = 0;
+			// data[3][1] = 0;
 
 			if (data[3][2] > 180) {
 				data[3][2] -= 360;
@@ -50,7 +41,7 @@ class Controller {
 
 			for (var i = 0; i < last.length; i++) {
 				data[3][0] = (data[3][0] + last[i][0])/2;
-				// data[3][1] = (data[3][1] + last[i][1])/2;
+				data[3][1] = (data[3][1] + last[i][1])/2;
 				data[3][2] = (data[3][2] + last[i][2])/2;
 			}
 
@@ -110,17 +101,32 @@ class Controller {
 
 		this.mesh.getWorldDirection(v);
 
-		this.raycaster.set(new THREE.Vector3(0, 0, 0), v);
-		// this.raycaster.set(this.mesh.position, v);
-
-		// this.raycaster.ray.origin = this.mesh.position;
-		// this.raycaster.ray.direction = v;
+		this.raycaster.ray.origin = this.mesh.position;
+		this.raycaster.ray.direction = new THREE.Vector3(-v.x, -v.y, -v.z);
 
 		var objects = this.raycaster.intersectObjects(Scene.scene.children, true);
 
 		for (var i = 0; i < objects.length; i++) {
 			if (objects[i].object.type != "Line") {
-				console.log(objects[i].object);
+				var object = objects[i].object;
+
+				var k = 0;
+
+				while (object.parent != Scene.scene && object.parent != this.mesh) {
+					object = object.parent;
+
+					k++;
+				}
+
+				if (!object.attached) {
+					object.attached = true;
+
+					this.mesh.attach(object);
+				} else {
+					object.attached = false;
+
+					Scene.scene.attach(object);
+				}
 
 				break;
 			}

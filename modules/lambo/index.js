@@ -12,6 +12,8 @@ class Lambo {
 
 		await this.loadCar();
 
+		// this.spin();
+
 		// await this.loadGarage();
 	}
 
@@ -47,15 +49,18 @@ class Lambo {
 
 		Scene.scene.add(car.scene);
 
+		this.car = car;
+	}
+
+	static async spin() {
+		var context = this;
 		Scene.addCallback(function(delta) {
 			var r = delta/(60/2) * Math.PI;
 			
 			if (r != Infinity) {
-				Lambo.car.scene.rotation.y -= r;
+				context.car.scene.rotation.y -= r;
 			}
 		});
-
-		this.car = car;
 	}
 
 	static async loadGarage() {
