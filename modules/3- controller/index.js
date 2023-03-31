@@ -27,13 +27,40 @@ class Controller {
 
 		var offset = 0;
 
+		var g = [];
+
 		var context = this;
 		SocketIo.on("controller", function(data) {
 			offset = data[3][2];
 
+			g = data[4];
+
 			context.addRay();
 		}, function(data) {
 			// data[3][1] = 0;
+
+			if (g[0] != data[4][0] || g[1] != data[4][1] || g[2] != data[4][2]) {
+				console.log(data[4][0], data[4][1], data[4][2]);
+
+				var x = "";
+				var y = "";
+
+				if (data[4][1] > 0) {
+					x = "right";
+				} else {
+					x = "left";
+				}
+
+				if (data[4][2] > 0) {
+					y = "top";
+				} else {
+					y = "bottom";
+				}
+
+				console.log(y, x);
+
+				g = data[4];
+			}
 
 			if (data[3][2] > 180) {
 				data[3][2] -= 360;
