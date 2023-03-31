@@ -10,56 +10,43 @@ class Controller {
 
 		var context = this;
 		Scene.renderer.xr.getController(0).addEventListener("selectstart", function() {
-			context.cast();
+			context.click("left", "top");
 		});
 
 		document.body.addEventListener("click", function() {
-			context.cast();
+			context.click("left", "top");
 		});
-
-		// setInterval(function() {
-		// 	context.cast();
-		// }, 1000/30);
 	}
 
 	static start() {
 		var last = [];
 
-		var offset = 0;
-
-		var g = [];
+		var offset = [];
 
 		var context = this;
 		SocketIo.on("controller", function(data) {
-			offset = data[3][2];
-
-			g = data[4];
+			offset = data;
 
 			context.addRay();
 		}, function(data) {
-			// data[3][1] = 0;
-
-			if (g[0] != data[4][0] || g[1] != data[4][1] || g[2] != data[4][2]) {
-				console.log(data[4][0], data[4][1], data[4][2]);
-
-				var x = "";
-				var y = "";
-
-				if (data[4][1] > 0) {
-					x = "right";
-				} else {
-					x = "left";
+			if (offset[4][0] != data[4][0] || offset[4][1] != data[4][1] || offset[4][2] != data[4][2]) {
+				if (data[4][0] == 0) {
+					if (data[4][2] > 0) {
+						if (data[4][1] < 0) {
+							context.click("left", "top");
+						} else {
+							context.click("right", "top");
+						}
+					} else {
+						if (data[4][1] < 0) {
+							context.click("left", "bottom");
+						} else {
+							context.click("right", "bottom");
+						}
+					}
 				}
 
-				if (data[4][2] > 0) {
-					y = "top";
-				} else {
-					y = "bottom";
-				}
-
-				console.log(y, x);
-
-				g = data[4];
+				offset[4] = data[4];
 			}
 
 			if (data[3][2] > 180) {
@@ -137,26 +124,20 @@ class Controller {
 			if (objects[i].object.type != "Line") {
 				var object = objects[i].object;
 
-				var k = 0;
-
 				while (object.parent != Scene.scene && object.parent != this.mesh) {
 					object = object.parent;
-
-					k++;
 				}
 
-				if (!object.attached) {
-					object.attached = true;
-
-					this.mesh.attach(object);
-				} else {
-					object.attached = false;
-
-					Scene.scene.attach(object);
-				}
+				console.log(object);
 
 				break;
 			}
+		}
+	}
+
+	static click(x, y) {
+		if (x == "left" && y == "top") {
+			this.cast();
 		}
 	}
 }
