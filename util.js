@@ -15,6 +15,10 @@ export default class Util {
 		return fs.readFileSync(path);
 	}
 
+	static writeFile(path, content) {
+		return fs.writeFileSync(path, content);
+	}
+
 	static verifyFile(path) {
 		return fs.existsSync(path);
 	}

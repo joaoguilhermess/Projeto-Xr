@@ -15,4 +15,3 @@ Server.registryDir("/public");
 Server.registryDir("/resources");
 
 Modules.Init();
-Modules.InitModules();

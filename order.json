@@ -1,0 +1,23 @@
+{
+	"enabled": [
+		"reload",
+		"cache",
+		"proxy",
+		"scene",
+		"controller",
+		"enter xr",
+		"menu",
+		"movie"
+	],
+	"disabled": [
+		"floor",
+		"fps",
+		"keyboard",
+		"lambo",
+		"orbit",
+		"camera",
+		"ui",
+		"sky",
+		"random"
+	]
+}
