@@ -28,9 +28,7 @@ function verify(path) {
 		var last = stats.mtime.toLocaleString();
 
 		if (stats.isDirectory()) {
-			var d = verify(f);
-
-			if (d) {
+			if (verify(f)) {
 				changed = true;
 			}
 		} else {

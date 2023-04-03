@@ -59,6 +59,8 @@ export default class Modules {
 			try {
 				order = JSON.parse(Util.readFile("./order.json").toString());
 			} catch {}
+		} else {
+			Util.writeFile("./order.json", JSON.stringify(order, null, "\t"));
 		}
 
 		for (var i = 0; i < modules.length; i++) {
@@ -79,7 +81,6 @@ export default class Modules {
 			}
 		}
 
-		Util.writeFile("./order.json", JSON.stringify(order, null, "\t"));
 
 		return order.enabled;
 	}

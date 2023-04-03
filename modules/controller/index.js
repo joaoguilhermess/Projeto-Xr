@@ -64,7 +64,7 @@ class Controller {
 			if (last.length >= 6) {
 				last.shift();
 			}
-			
+
 			context.mesh.rotation.set(
 				THREE.MathUtils.degToRad(data[3][0]),
 				THREE.MathUtils.degToRad(-data[3][2]),
@@ -83,7 +83,7 @@ class Controller {
 		var v = Math.sin(THREE.MathUtils.degToRad(45) * 0.075);
 
 		geometry.setFromPoints([
-			new THREE.Vector3(0, 0, -2.5),
+			new THREE.Vector3(0, 0, 0),
 			new THREE.Vector3(0, 0, -5),
 			new THREE.Vector3(v, 0, -5),
 			new THREE.Vector3(0, v, -5),
@@ -101,11 +101,9 @@ class Controller {
 
 		var mesh = new THREE.Line(geometry, material);
 
-		mesh.position.set(1, -0.5, 0);
-
+		mesh.position.set(1, -1, 0);
+		
 		Scene.scene.add(mesh);
-
-		// Scene.camera.attach(mesh);
 
 		this.mesh = mesh;
 	}
@@ -143,7 +141,7 @@ class Controller {
 		}
 
 		if (x == "right" && y == "top") {
-			console.log("UI.menu.open()")
+			
 		}
 	}
 }

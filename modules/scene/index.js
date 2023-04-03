@@ -75,7 +75,7 @@ class Scene {
 		this.renderer = renderer;
 
 		this.camera = camera;
-		this.light = light;
+		this.light2 = light2;
 
 		this.clock = clock;
 	}

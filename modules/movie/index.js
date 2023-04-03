@@ -18,4 +18,4 @@ class Movie {
 
 window.Movie = Movie;
 
-Movie.Init();
+// Movie.Init();

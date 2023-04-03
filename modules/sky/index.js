@@ -61,4 +61,4 @@ class Sky {
 
 window.Sky = Sky;
 
-// Sky.Init();
+Sky.Init();

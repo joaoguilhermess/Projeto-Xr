@@ -5,7 +5,7 @@ async function initModules() {
 	for (var i = 0; i < modules.length; i++) {
 		try {
 			await import("/modules/" + modules[i] + "/index.js");
-		} catch {}
+		} catch (e) {console.error(e);}
 	}
 }
 
