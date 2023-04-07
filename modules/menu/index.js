@@ -5,6 +5,8 @@ class Menu {
 	static Init() {
 		this.loadMesh();
 
+		this.toggle();
+
 		this.updatePosition();
 
 		this.loadBackground();
@@ -17,8 +19,12 @@ class Menu {
 		this.loadClock();
 
 		this.loadMiddle();
+	}
 
-		this.loadButton();
+	static toggle() {
+		Menu.mesh.visible = !Menu.mesh.visible;
+
+		this.updatePosition();
 	}
 
 	static loadMesh() {
@@ -215,14 +221,14 @@ class Menu {
 	static loadMiddle() {
 		var mesh = new THREE.Group();
 
-		mesh.position.set(0, 0, 0.1);
+		mesh.position.set(0, 0.15, 0.1);
 
 		this.mesh.add(mesh);
 
 		this.middle = mesh;
 	}
 
-	static loadButton() {
+	static loadButton(name, callback) {
 		var shape = new THREE.Shape();
 
 		var x = 0.3/2;
@@ -266,15 +272,28 @@ class Menu {
 
 		text.lineHeight = 1;
 
-		text.text = "Movie"
+		text.text = name;
 
 		text.sync();
 
 		text.position.set(0, 0, 0.01);
 
-		mesh.position.set(-0.5, 0, 0);
+		if (!this.buttons) {
+			this.buttons = [];
+		}
+
+		this.buttons.push(mesh);
+
+		console.log();
+
+		mesh.position.set(-1 + (this.buttons.length - Math.floor((this.buttons.length - 1)/3) * 3) * 0.5, -0.235 * Math.floor((this.buttons.length - 1)/3), 0);
+		// mesh.position.set(px, py, 0);
 
 		mesh.add(text);
+
+		mesh.userData.onclick = function() {
+			callback(mesh);
+		};
 
 		this.middle.add(mesh);
 	}

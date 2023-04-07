@@ -27,9 +27,8 @@ class Sky {
 	static async loadMap() {
 		var texture = await new Promise(function(resolve, reject) {
 			var loader = new THREE.TextureLoader();
-			
-			// loader.load("/resources/360/iss.jpg", resolve);
-			loader.load("/resources/depth/texture.jpg", resolve);
+
+			loader.load("/resources/360/01-8192 (3).jpg", resolve);
 		});
 		texture.magFilter = THREE.LinearFilter;
 		texture.minFilter = THREE.LinearFilter;

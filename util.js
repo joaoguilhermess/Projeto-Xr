@@ -35,7 +35,7 @@ export default class Util {
 		return fs.createWriteStream(path);
 	}
 
-	static readStream(path) {
-		return fs.createReadStream(path);
+	static readStream(...args) {
+		return fs.createReadStream(...args);
 	}
 }

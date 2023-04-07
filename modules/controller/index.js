@@ -6,6 +6,8 @@ class Controller {
 	static Init() {
 		this.raycaster = new THREE.Raycaster();
 
+		this.raycaster.layers.set(0);
+
 		this.start();
 
 		var context = this;
@@ -31,19 +33,9 @@ class Controller {
 		}, function(data) {
 			if (offset[4][0] != data[4][0] || offset[4][1] != data[4][1] || offset[4][2] != data[4][2]) {
 				if (data[4][0] == 0) {
-					if (data[4][2] > 0) {
-						if (data[4][1] < 0) {
-							context.click("left", "top");
-						} else {
-							context.click("right", "top");
-						}
-					} else {
-						if (data[4][1] < 0) {
-							context.click("left", "bottom");
-						} else {
-							context.click("right", "bottom");
-						}
-					}
+					context.click(data[4][1], data[4][2]);
+				} else if (data[4][0] == 2) {
+					context.move(data[4][1], data[4][2]);
 				}
 
 				offset[4] = data[4];
@@ -119,29 +111,87 @@ class Controller {
 		var objects = this.raycaster.intersectObjects(Scene.scene.children, true);
 
 		for (var i = 0; i < objects.length; i++) {
-			if (objects[i].object.type != "Line") {
-				var object = objects[i].object;
-
-				while (object.parent != Scene.scene && object.parent != this.mesh) {
-					object = object.parent;
-				}
-
-				return object;
+			if (objects[i].object.type != "Line" && this.getParent(objects[i].object).visible) {
+				return objects[i].object;
 			}
 		}
 	}
 
 	static click(x, y) {
-		if (x == "left" && y == "top") {
-			var object = this.cast();
-
-			if (object) {
-				console.log(object);
-			} 
+		if (x < 0 && y > 0) {
+			return this.topLeftClick();
 		}
 
-		if (x == "right" && y == "top") {
-			
+		if (x > 0 && y > 0) {
+			return this.topRightClick();
+		}
+
+		if (x < 0 && y < 0) {
+			return this.bottomLeftClick();
+		}
+	}
+
+	static move(x, y) {
+		// if (y < 0) {
+		// 	console.log(x);
+		// }
+	}
+
+	static topLeftClick() {
+		var object = this.cast();
+
+		if (!object) {
+			return;
+		}
+
+		var clickable = this.getClickable(object);
+
+		if (!clickable) {
+			return;
+		}
+
+		clickable.userData.onclick();	
+	}
+
+	static topRightClick() {
+		var object = this.cast();
+
+		if (!object) {
+			return;
+		}
+		
+		var parent = this.getParent(object);
+
+		if (!parent.userData.selected) {
+			parent.userData.selected = true;
+
+			this.mesh.attach(parent);
+		} else {
+			parent.userData.selected = false;
+
+			Scene.scene.attach(parent);
+		}
+	}
+
+	static bottomLeftClick() {
+		Menu.toggle();
+	}
+
+	static getParent(object) {
+		while (object.parent != Scene.scene && object.parent != this.mesh)	 {
+			object = object.parent;
+		}
+
+		return object;
+	}
+
+	static getClickable(object) {
+		while (object.parent != Scene.scene && object.parent != this.mesh) {
+			if (object.userData.onclick) {
+				return object;
+			} else {
+				object = object.parent;
+			}
 		}
 	}
 }

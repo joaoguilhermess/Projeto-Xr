@@ -44,7 +44,7 @@ class Lambo {
 			loader.load("/lan/1607958265982.car.3df8c.gltf", resolve);
 		});
 
-		car.scene.position.set(-2, -1.6, -4);
+		car.scene.position.set(-3, -1.6, -1);
 		car.scene.scale.set(s, s, s);
 
 		Scene.scene.add(car.scene);
@@ -81,4 +81,4 @@ class Lambo {
 
 window.Lambo = Lambo;
 
-// Lambo.Init();
+Lambo.Init();

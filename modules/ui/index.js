@@ -140,4 +140,4 @@ class Main {
 
 window.Ui = Ui;
 
-// Ui.Init();
+Ui.Init();

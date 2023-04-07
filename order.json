@@ -11,13 +11,13 @@
 		"movie"
 	],
 	"disabled": [
+		"lambo",
+		"sky",
 		"floor",
 		"fps",
 		"keyboard",
-		"lambo",
 		"camera",
 		"ui",
-		"sky",
 		"random"
 	]
 }

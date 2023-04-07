@@ -12,8 +12,8 @@ class Scene {
 
 		// scene.fog = new THREE.Fog(0x000000, 0, 15);
 
-		// var light = new THREE.AmbientLight(0xffffff, 0.5);
-		// scene.add(light);
+		var light = new THREE.AmbientLight(0xffffff, 0.5);
+		scene.add(light);
 
 		var light2 = new THREE.HemisphereLight(0xeeeeee, 0x000000, 1);
 		light2.position.set(0.5, 1, 0.75);
@@ -75,7 +75,6 @@ class Scene {
 		this.renderer = renderer;
 
 		this.camera = camera;
-		this.light2 = light2;
 
 		this.clock = clock;
 	}
