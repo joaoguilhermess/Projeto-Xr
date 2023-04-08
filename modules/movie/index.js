@@ -69,9 +69,9 @@ class Movie {
 		});
 
 		// this.scale = 2.31;
-		this.scale = 2;
+		var scale = 2;
 
-		var geometry = new THREE.PlaneBufferGeometry(this.video.videoWidth/this.video.videoHeight * this.scale, this.scale);
+		var geometry = new THREE.PlaneBufferGeometry(this.video.videoWidth/this.video.videoHeight * scale, scale);
 
 		var material = new THREE.MeshBasicMaterial();
 

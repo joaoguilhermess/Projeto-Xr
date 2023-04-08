@@ -81,6 +81,9 @@ export default class Modules {
 			}
 		}
 
+		if (JSON.parse(Util.readFile("./order.json").toString()) != order) {
+			Util.writeFile("./order.json", JSON.stringify(order, null, "\t"));
+		}
 
 		return order.enabled;
 	}

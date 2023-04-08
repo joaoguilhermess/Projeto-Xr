@@ -8,16 +8,18 @@
 		"enter xr",
 		"menu",
 		"orbit",
+		"camera",
 		"movie"
 	],
 	"disabled": [
+		"night",
 		"lambo",
 		"sky",
 		"floor",
 		"fps",
 		"keyboard",
-		"camera",
 		"ui",
-		"random"
+		"random",
+		"webrtc"
 	]
 }
