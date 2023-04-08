@@ -65,7 +65,7 @@ class Movie {
 		await new Promise(function(resolve, reject) {
 			context.video.onplaying = resolve;
 
-			context.video.currentTime = time;
+			// context.video.currentTime = time;
 		});
 
 		// this.scale = 2.31;

@@ -4,7 +4,7 @@ import Util from "../../util.js";
 export function Init() {
 	Server.registryScript("/movie", async function(req, res) {
 		try {
-			var path = "../Iron Man (2008).mkv";
+			var path = "../Iron Man (2008) (2).mkv";
 
 			var stats = Util.readStats(path);
 
@@ -15,7 +15,9 @@ export function Init() {
 			} else {
 				start = 0;
 			}
-			
+
+			console.log(start, stats.size);
+
 			res.set({
 				"accept-ranges": "bytes",
 				"cache-control": "no-cache",
