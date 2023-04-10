@@ -2,23 +2,42 @@ import * as THREE from "three";
 import {Text as TroikaText} from "troika-three-text";
 
 class Movie {
-	static async Init() {
-		this.url = "/movie";
+	static Init() {
+		var context = this;
+		Menu.loadButton("Movie", function() {
+			context.start();
+		}, function() {
+			context.stop();
+		});
+	}
 
+	static start() {
 		this.loadMesh();
 
-		await new Promise(function(resolve, reject) {
-			Menu.loadButton("Movie", resolve);
-		});
+		this.loadUrl("/movie");
 
-		this.loadUrl();
-
-		await this.loadTexture();
+		this.loadTexture();
 
 		var context = this;
-		setInterval(function() {
+		this.interval = setInterval(function() {
 			localStorage.setItem("movie", context.video.currentTime);
 		}, 1000/2);
+	}
+
+	static stop() {	
+		clearInterval(this.interval);
+
+		this.video.remove();
+
+		this.frame.geometry.dispose();
+
+		this.frame.material.map.dispose();
+
+		this.frame.material.dispose();
+
+		Scene.scene.remove(this.frame);
+		
+		Scene.scene.remove(this.mesh);
 	}
 
 	static loadMesh() {
@@ -28,7 +47,9 @@ class Movie {
 
 		Scene.camera.getWorldDirection(v);
 
-		mesh.position.set(v.x, v.y, v.z * 3);
+		var d = 3;
+
+		mesh.position.set(v.x * d, v.y * d, v.z * d);
 		mesh.lookAt(0, 0, 0);
 
 		Scene.scene.add(mesh);
@@ -36,7 +57,7 @@ class Movie {
 		this.mesh = mesh;
 	}
 
-	static loadUrl() {
+	static loadUrl(url) {
 		var video = document.createElement("video");
 
 		video.autoplay = false;
@@ -45,7 +66,7 @@ class Movie {
 		video.preload = "auto";
 		video.style.display = "none";
 
-		video.src = this.url;
+		video.src = url;
 
 		document.body.append(video);
 
@@ -65,10 +86,9 @@ class Movie {
 		await new Promise(function(resolve, reject) {
 			context.video.onplaying = resolve;
 
-			// context.video.currentTime = time;
+			context.video.currentTime = time;
 		});
 
-		// this.scale = 2.31;
 		var scale = 2;
 
 		var geometry = new THREE.PlaneBufferGeometry(this.video.videoWidth/this.video.videoHeight * scale, scale);
@@ -84,6 +104,8 @@ class Movie {
 		var mesh = new THREE.Mesh(geometry, material);
 
 		this.mesh.add(mesh);
+
+		this.frame = mesh;
 	}
 }
 

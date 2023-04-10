@@ -3,6 +3,8 @@ class Camera {
 		var context = this;
 		Menu.loadButton("Camera", function() {
 			context.start();
+		}, function() {
+			context.stop();
 		});
 	}
 
@@ -10,6 +12,24 @@ class Camera {
 		await this.loadSource();
 
 		await this.loadMesh();
+	}
+
+	static stop() {
+		var tracks = this.video.srcObject.getTracks();
+
+		for (var i = 0; i < tracks.length; i++) {
+			tracks[i].stop();
+		}
+
+		this.video.remove();
+
+		this.mesh.geometry.dispose();
+
+		this.mesh.material.map.dispose();
+
+		this.mesh.material.dispose();
+
+		Scene.scene.remove(this.mesh);
 	}
 
 	static async loadSource() {
@@ -35,7 +55,7 @@ class Camera {
 			context.video.onplaying = resolve;
 		});
 
-		var scale = 5;
+		var scale = 6;
 
 		var geometry = new THREE.PlaneBufferGeometry(this.video.videoWidth/this.video.videoHeight * scale, scale);
 
@@ -54,25 +74,15 @@ class Camera {
 		Scene.addCallback(function() {
 			Scene.camera.getWorldDirection(v);
 
-			mesh.position.set(v.x, v.y, v.z * 5);
+			var d = 4;
+
+			mesh.position.set(v.x * d, v.y * d, v.z * d);
 			mesh.lookAt(0, 0, 0);
 		});
 
 		Scene.scene.add(mesh);
 
 		this.mesh = mesh;
-	}
-
-	static stop() {
-		this.video.remove();
-
-		this.mesh.geometry.dispose();
-
-		this.mesh.material.map.dispose();
-
-		this.mesh.material.dispose();
-
-		Scene.scene.remove(this.mesh);
 	}
 }
 

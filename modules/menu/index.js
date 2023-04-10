@@ -40,7 +40,9 @@ class Menu {
 
 		Scene.camera.getWorldDirection(v);
 
-		this.mesh.position.set(v.x, v.y, v.z * 2);
+		var d = 2;
+
+		this.mesh.position.set(v.x * d, v.y * d, v.z * d);
 		this.mesh.lookAt(0, 0, 0);
 	}
 
@@ -228,7 +230,7 @@ class Menu {
 		this.middle = mesh;
 	}
 
-	static loadButton(name, callback) {
+	static loadButton(name, callback1, callback2) {
 		var shape = new THREE.Shape();
 
 		var x = 0.3/2;
@@ -249,15 +251,19 @@ class Menu {
 
 		// var geometry = new THREE.PlaneBufferGeometry(0.2, 0.2);
 
-		var material = new THREE.MeshBasicMaterial({
+		var material1 = new THREE.MeshBasicMaterial({
 			color: 0x070707
 		});
 
-		var material2 = new	THREE.MeshBasicMaterial({
+		var material2 = new THREE.MeshBasicMaterial({
+			color: 0x101010
+		})
+
+		var material3 = new	THREE.MeshBasicMaterial({
 			color: 0xffffff
 		});
 
-		var mesh = new THREE.Mesh(geometry, material);
+		var mesh = new THREE.Mesh(geometry, material1);
 
 		var text = new TroikaText();
 
@@ -268,7 +274,7 @@ class Menu {
 		text.anchorX = "center";
 		text.anchorY = "middle";
 
-		text.material = material2;
+		text.material = material3;
 
 		text.lineHeight = 1;
 
@@ -284,15 +290,24 @@ class Menu {
 
 		this.buttons.push(mesh);
 
-		console.log();
-
 		mesh.position.set(-1 + (this.buttons.length - Math.floor((this.buttons.length - 1)/3) * 3) * 0.5, -0.235 * Math.floor((this.buttons.length - 1)/3), 0);
-		// mesh.position.set(px, py, 0);
 
 		mesh.add(text);
 
+		var enabled = false;
+
 		mesh.userData.onclick = function() {
-			callback(mesh);
+			enabled = !enabled;
+
+			if (enabled) {
+				callback1(mesh);
+
+				mesh.material = material2;
+			} else {
+				callback2(mesh);
+
+				mesh.material = material1;
+			}
 		};
 
 		this.middle.add(mesh);

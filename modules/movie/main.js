@@ -6,29 +6,36 @@ export function Init() {
 		try {
 			var path = "../Iron Man (2008) (2).mkv";
 
-			var stats = Util.readStats(path);
-
-			var start;
-
-			if (req.headers["range"]) {
-				start = parseInt(req.headers["range"].split("=")[1].split("-")[0]);
-			} else {
-				start = 0;
+			if (!req.headers["range"]) {
+				return res.end();
 			}
 
-			console.log(start, stats.size);
+			var stats = Util.readStats(path);
+
+			var chunk = 1024 * 1024;
+
+			var start = parseInt(req.headers["range"].split("=")[1].split("-")[0]);
+			var end = start + chunk;
+
+			if (end > stats.size - 1) {
+				end = stats.size - 1;
+
+				chunk = stats.size - 1 - start;
+			}
+
+			console.log(start, end);
 
 			res.set({
-				"accept-ranges": "bytes",
-				"cache-control": "no-cache",
-				"content-length": stats.size,
-				"content-range": "bytes " + start + "-" + (stats.size -1) + "/" + stats.size,
-				"content-type": "video/x-matroska"
+				"Accept-Ranges": "bytes",
+				"Cache-Control": "no-cache",
+				"Content-Length": chunk,
+				"Content-Range": "bytes " + start + "-" + end + "/" + stats.size,
+				"Content-Type": "video/x-matroska"
 			});
 
 			res.status(206);
 
-			var stream = Util.readStream(path, {start: start});
+			var stream = Util.readStream(path, {start: start, end: end});
 
 			stream.pipe(res);
 

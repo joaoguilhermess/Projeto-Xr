@@ -6,8 +6,6 @@ class Controller {
 	static Init() {
 		this.raycaster = new THREE.Raycaster();
 
-		this.raycaster.layers.set(0);
-
 		this.start();
 
 		var context = this;
@@ -26,11 +24,25 @@ class Controller {
 		var offset = [];
 
 		var context = this;
-		SocketIo.on("controller", function(data) {
+		SocketIo.on("controller", async function(data) {
 			offset = data;
+
+			offset[3][2] = await new Promise(function(resolve, reject) {
+				ondeviceorientationabsolute = function(event) {
+					resolve(Math.abs(event.alpha - 360));
+
+					ondeviceorientationabsolute = null;
+				}
+			});
 
 			context.addRay();
 		}, function(data) {
+			if (!context.mesh) {
+				return;
+			}
+
+			data[3][2] -= offset[3][2];
+
 			if (offset[4][0] != data[4][0] || offset[4][1] != data[4][1] || offset[4][2] != data[4][2]) {
 				if (data[4][0] == 0) {
 					context.click(data[4][1], data[4][2]);
@@ -62,7 +74,17 @@ class Controller {
 				THREE.MathUtils.degToRad(-data[3][2]),
 				THREE.MathUtils.degToRad(-data[3][1])
 			);
-		}, null);
+		}, function() {
+			context.stop();
+		});
+	}
+
+	static stop() {
+		this.mesh.geometry.dispose();
+
+		this.mesh.material.dispose();
+
+		Scene.scene.remove(this.mesh);
 	}
 
 	static addRay() {
