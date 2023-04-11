@@ -34,7 +34,14 @@ class Camera {
 
 	static async loadSource() {
 		var stream = await new Promise(function(resolve, reject) {
-			navigator.getUserMedia({video: {facingMode: "environment"}, audio: false}, resolve, reject);
+			navigator.getUserMedia({
+				video: {
+					facingMode: "environment",
+					height: 2160/2,
+					width: 4096/2
+				},
+				audio: false
+			}, resolve, reject);
 		});
 
 		var video = document.createElement("video");
