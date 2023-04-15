@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>WebRtc</title>
+	<style type="text/css">
+		* {
+			box-sizing: content-box;
+		}
+
+		html, body {
+			height: 100vh;
+			width: 100vw;
+			border: 0;
+			margin: 0;
+			padding: 0;
+			outline: 0;
+		}
+
+		body {
+			display: flex;
+			background-color: #000000;
+		}
+
+		.video {
+			display: flex;
+			height: 100vh;
+			width: 100vw;
+		}
+	</style>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/public/socketio.js"></script>
+</head>
+<body>
+	<video class="video"></video>
+	<script>
+		class WebRtc {
+			static Init() {
+				var video = document.querySelector(".video");
+			
+				video.autoplay = true;
+				video.muted = true;
+
+				var context = this;
+				video.onclick = function() {
+					context.Offer();
+				}
+
+				this.video = video;
+
+				SocketIo.on("webrtc-icecandidate", function() {
+
+				});
+			}
+
+			static async Offer() {
+				var stream = await navigator.mediaDevices.getDisplayMedia();
+
+				this.video.srcObject = stream;
+
+				var peer = new RTCPeerConnection();
+
+				peer.onicecandidate = function(event) {
+					console.log(event.candidate);
+				};
+
+				var offer = peer.createOffer();
+
+				peer.setLocalDescription(offer);
+
+				SocketIo.emit("webrtc-offer", offer);
+			}
+		}
+
+		WebRtc.Init();
+	</script>
+</body>
+</html>

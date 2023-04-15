@@ -17,12 +17,12 @@ class SocketIo {
 
 		this.socket.on(type, function(...args) {
 			if (!one) {
-				if (callback1 != null) {
+				if (callback1) {
 					callback1(...args);
 				}
 				one = true;
 			} else {
-				if (callback2 != null) {
+				if (callback2) {
 					callback2(...args);
 				}
 			}
@@ -30,12 +30,16 @@ class SocketIo {
 
 		this.socket.on("off", function(name) {
 			if (name == type) {
-				if (callback3 != null) {
+				if (callback3) {
 					callback3();
 				}
 				one = false;
 			}
 		});
+	}
+
+	static emit(type, value) {
+		this.socket.emit(type, value);
 	}
 }
 

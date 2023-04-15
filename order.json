@@ -9,6 +9,7 @@
 		"menu",
 		"orbit",
 		"camera",
+		"webrtc",
 		"movie"
 	],
 	"disabled": [
@@ -19,7 +20,6 @@
 		"fps",
 		"keyboard",
 		"ui",
-		"random",
-		"webrtc"
+		"random"
 	]
 }
